@@ -1,0 +1,68 @@
+
+Cognition => Concept => System => Math => Mathematical model => Mathematical object => Set => Relations => Abstract Algebra
+
+1. Cognition  
+Refers to "the mental action or process of acquiring knowledge and understanding through thought, experience, and the senses".
+
+2. concepts
+Are defined as abstract ideas. They are understood to be the fundamental building blocks of the concept behind principles, thoughts and beliefs. They play an important role in all aspects of cognition.
+
+3. system
+A system is a group of interacting or interrelated elements that act according to a set of rules to form a unified whole. A system, surrounded and influenced by its environment, is described by its boundaries, structure and purpose and expressed in its functioning. Systems are the subjects of study of systems theory and other systems sciences.
+
+4. math
+Scince of abstractions
+
+5. mathematical model
+A mathematical model is a description of a system using mathematical concepts and language. 
+
+6. mathematical object
+A mathematical object is an abstract concept arising in mathematics. 
+In the usual language of mathematics, an object is anything that has been (or could be) formally defined, and with which one may do deductive reasoning and mathematical proofs. Typically, a mathematical object can be a value that can be assigned to a variable, and therefore can be involved in formulas.
+
+7. Sey
+A set is the mathematical model for a collection of different things; a set contains elements or members, which can be mathematical objects of any kind: numbers, symbols, points in space, lines, other geometrical shapes, variables, or even other sets.
+
+8. Binary relation
+Binary relation defined by a set of ordered pairs
+Binary relation over sets X and Y is an element of the power set of X × Y.
+Binary relation is either a homogeneous relation or a heterogeneous relation depending on whether X = Y or not.
+Relations are sets => they can be manipulated using set operations (union, intersection, and complementation) and satisfying the laws of an algebra of sets.
+
+9. Mathematical structure
+
+In mathematics, a structure is a set endowed with some additional features on the set (e.g. an operation, relation, metric, or topology). Often, the additional features are attached or related to the set, so as to provide it with some additional meaning or significance.
+
+A partial list of possible structures are measures, algebraic structures (groups, fields, etc.), topologies, metric structures (geometries), orders, events, equivalence relations, differential structures, and categories.
+
+10. algebraic structure
+
+In mathematics, an algebraic structure consists of a nonempty set A (called the underlying set, carrier set or domain), a collection of operations on A (typically binary operations such as addition and multiplication), and a finite set of identities, known as axioms, that these operations must satisfy.
+
+An algebraic structure may be based on other algebraic structures with operations and axioms involving several structures. For instance, a vector space involves a second structure called a field, and an operation called scalar multiplication between elements of the field (called scalars), and elements of the vector space (called vectors).
+
+Abstract algebra is the name that is commonly given to the study of algebraic structures. The general theory of algebraic structures has been formalized in universal algebra. Category theory is another formalization that includes also other mathematical structures and functions between structures of the same type (homomorphisms).
+
+=================
+Математические объекты создаются путём идеализации свойств реальных или других математических объектов и записи этих свойств на формальном языке.
+Математические объекты (геометрическая фигура, число, множество, категория) созданы человеческим умом и существуют лишь в мышлении человека, в знаках и символах, которые образуют математический язык.
+
+
+
+-- relations
+
+-- https://hackage.haskell.org/package/relation-0.2.1/docs/Data-Relation.html
+-- https://stackoverflow.com/questions/23508691/check-that-a-relation-is-symmetric-in-haskell
+-- https://codegolf.stackexchange.com/questions/100660/determine-if-a-relation-is-transitive
+-- https://math.stackexchange.com/questions/778164/is-an-anti-symmetric-and-asymmetric-relation-the-same-are-irreflexive-and-anti
+
+-- https://en.wikipedia.org/wiki/Relation_(mathematics)
+-- https://www.toppr.com/guides/maths/relations-and-functions/types-of-relations/#:~:text=There%20are%209%20types%20of,equivalence%20relation%2C%20and%20asymmetric%20relation.
+-- https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%B0%D0%BC%D0%B0%D1%82%D0%B5%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0
+-- similatice 
+-- LCA
+
+
+
+
+
