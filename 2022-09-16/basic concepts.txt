@@ -20,7 +20,7 @@ A mathematical model is a description of a system using mathematical concepts an
 A mathematical object is an abstract concept arising in mathematics. 
 In the usual language of mathematics, an object is anything that has been (or could be) formally defined, and with which one may do deductive reasoning and mathematical proofs. Typically, a mathematical object can be a value that can be assigned to a variable, and therefore can be involved in formulas.
 
-7. Sey
+7. Set
 A set is the mathematical model for a collection of different things; a set contains elements or members, which can be mathematical objects of any kind: numbers, symbols, points in space, lines, other geometrical shapes, variables, or even other sets.
 
 8. Binary relation
