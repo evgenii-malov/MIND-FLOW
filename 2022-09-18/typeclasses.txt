@@ -1,0 +1,26 @@
+"algebraic structure" is a concept that goes well beyond programming, it belongs to mathematics.
+
+Imagine the unfathomably deep sea of all possible mathematical objects. Numbers of every stripe (the naturals, the reals, p-adic numbers...) are there, but also things like sequences of letters, graphs, trees, symmetries of geometrical figures, and all well-defined transformations and mappings between them. And much else.
+
+We can try to "throw a net" into this sea and retain only some of those entities, by specifying conditions. Like "collections of things, for which there is an operation that combines two of those things into a third thing of the same type, and for which the operation is associative". We can give those conditions their own name, like, say, "semigroup". (Because we are talking about highly abstract stuff, choosing a descriptive name is difficult.)
+
+That leaves out many inhabitants of the mathematical "sea", but the description still fits a lot of them! Many collections of things are semigroups. The natural numbers with the multiplication operation for example, but also non-empty lists of letters with concatenation, or the symmetries of a square with composition.
+
+The purpose of type classes is to add structure to polymorphic types—just enough structure to allow us to solve our problem, but not more structure than necessary, so we can benefit from maximum code reuse, and maximally constrain our implementation.
+
+Laws. A good typeclass has laws. A great typeclass has enough parametricity so that it's laws are "theorems for free". A typeclass without laws is just ad-hoc name overloading.
+
+The word structure is critically important. By structure, I mean algebraic structure: the operations that a type class provides us with satisfy some properties (the laws) across all types for which there is an instance.
+
+Most polymorphic functions will require some structure from a type: they will need the ability to do something with values of that type. For example, they might need to combine them, compare them, iterate over them, or construct them.
+
+To add structure to a type, to give us some operations, we use type classes. Type classes, being functions from types to a set of lawful operations on values of those types, give us the ability to operate with values of some unknown type. Although we may not know what the type is, thanks to type classes, we have enough structure to generically solve our problem.
+
+The final piece of the puzzle is called a type class constraint. Type class constraints are the mechanism by which a language allows us to statically require that some polymorphic type have an instance for a given type class.
+
+The structure that type classes provide is the foundation for writing well-defined generic code; without structure, there is no abstraction—only indirection.
+
+
+https://degoes.net/articles/when-to-typeclass#:~:text=To%20add%20structure%20to%20a,values%20of%20some%20unknown%20type
+https://stackoverflow.com/questions/63655414/what-are-algebraic-structures-in-functional-programming
+https://stackoverflow.com/questions/25191659/why-is-haskell-missing-obvious-typeclasses
