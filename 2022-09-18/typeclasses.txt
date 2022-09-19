@@ -1,3 +1,5 @@
+TYPE CLASSES AND ALGEBRAIC STRUCTURE:
+
 "algebraic structure" is a concept that goes well beyond programming, it belongs to mathematics.
 
 Imagine the unfathomably deep sea of all possible mathematical objects. Numbers of every stripe (the naturals, the reals, p-adic numbers...) are there, but also things like sequences of letters, graphs, trees, symmetries of geometrical figures, and all well-defined transformations and mappings between them. And much else.
@@ -22,5 +24,6 @@ The structure that type classes provide is the foundation for writing well-defin
 
 
 https://degoes.net/articles/when-to-typeclass#:~:text=To%20add%20structure%20to%20a,values%20of%20some%20unknown%20type
+https://stackoverflow.com/questions/15003974/why-do-all-haskell-typeclasses-have-laws
 https://stackoverflow.com/questions/63655414/what-are-algebraic-structures-in-functional-programming
 https://stackoverflow.com/questions/25191659/why-is-haskell-missing-obvious-typeclasses
