@@ -1,0 +1,18 @@
+https://math.stackexchange.com/questions/3659625/mathematical-explanation-of-the-difference-between-sql-joins-inner-outer-left
+
+CROSS JOIN = CARTESIAN PRODUCT
+INNER JOIN = CROSS JOIN + PREDICATE
+
+Now let
+A^=A∪{NULL},
+B^=B∪{NULL}.
+
+Then we have
+
+AINNER JOINBONR={(a,b)∈A×B|a∼b}
+ALEFT JOINBONR={(a,b)∈A×B^|a∼b}
+ARIGHT JOINBONR={(a,b)∈A^×B|a∼b}
+AOUTER JOINBONR={(a,b)∈A^×B^|a∼b}.
+
+In MySQL, JOIN, CROSS JOIN, and INNER JOIN are syntactic equivalents (they can replace each other). In standard SQL, they are not equivalent. INNER JOIN is used with an ON clause, CROSS JOIN is used otherwise.
+
