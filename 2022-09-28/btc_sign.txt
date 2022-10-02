@@ -1,0 +1,2 @@
+privateToPublic :: PrivateKey -> PublicKey
+check_signature :: TransactionHash -> PublicKey-> Signature -> Bool

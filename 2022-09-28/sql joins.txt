@@ -16,3 +16,44 @@ AOUTER JOINBONR={(a,b)∈A^×B^|a∼b}.
 
 In MySQL, JOIN, CROSS JOIN, and INNER JOIN are syntactic equivalents (they can replace each other). In standard SQL, they are not equivalent. INNER JOIN is used with an ON clause, CROSS JOIN is used otherwise.
 
+
+https://msbiskills.com/2015/09/15/sql-server-what-are-bags-sets/
+
+SQL Server technically has “bags” not “sets”.
+
+1. Set – A set is an unordered collection of elements without duplicates.
+
+2. Bags – A Bag is unordered collections of elements with duplicates. A bag is also called as MultiSets.
+
+3. Tables – It is an associations of keys and values
+
+Operations you can do with a bag are:
+
+Inserting a new value
+Removing a value
+Testing if a value is present in the collection
+Find number of elements in the collection
+
+A Set extends the bag in two important ways.
+
+First the elements in a set must be unique;
+Second the set adds a number of operations that combine two sets to produce a new set.
+The union – It is the set of values that are present in either collection.
+The intersection – It  is the set of values that appear in both collections.
+A set difference includes values found in one set but
+not the other.
+
+
+
+recursive CTE
+
+https://www.youtube.com/watch?v=7hZYh9qXxe4
+
+Support recursive CTE. Example:
+
+Numbers from 1 to 10:
+
+with recursive qn as
+ (select 1 as a union distinct select 1+a from qn where a<10)
+select * from qn;
+prints 1 to 10.
