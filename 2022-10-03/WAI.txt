@@ -1,0 +1,2 @@
+https://www.stackage.org/package/wai
+https://hackage.haskell.org/package/wai-3.2.3/docs/Network-Wai.html#t:Response
