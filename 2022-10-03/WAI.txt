@@ -1,2 +1,3 @@
 https://www.stackage.org/package/wai
 https://hackage.haskell.org/package/wai-3.2.3/docs/Network-Wai.html#t:Response
+https://www.youtube.com/watch?v=mz5_HmLGRXc&t=1233s
