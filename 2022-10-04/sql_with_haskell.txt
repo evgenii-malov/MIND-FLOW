@@ -1,0 +1,11 @@
+https://edu.anarcho-copy.org/Programming%20Languages/Haskell/Get%20Programming%20with%20Haskell.pdf - USING DATABASES IN HASKELL
+https://livebook.manning.com/book/get-programming-with-haskell/chapter-41/1
+
+https://hackage.haskell.org/package/sql-simple
+
+https://wiki.haskell.org/Applications_and_libraries/Database_interfaces
+https://github.com/paul-rouse/mysql-simple
+https://github.com/winterland1989/mysql-haskell
+
+https://hackage.haskell.org/package/resource-pool - connection pool
+

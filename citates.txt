@@ -1,0 +1,14 @@
+"GET PROGRAMMING WITH HASKELL"
+
+ John Backus, who led the team that created Fortran, asked in his Turing Award lecture, “Can programming be liberated from the von Neumann style?”
+This question leads to the second way to understand programming, which is the subject
+of the first unit in this book. Functional programming attempts to liberate programming
+from the von Neumann style. The foundations of functional programming are abstract,
+mathematical notions of computation that transcend a specific implementation. This
+leads to a method of programming that often solves problems simply by describing
+them. By focusing on computation, not computers, functional programming allows the
+programmer access to powerful abstractions that can make many challenging problems
+much easier to solve.
+The price of this is that getting started can be much more difficult. Ideas in functional
+programming are often abstract, and we must start by building the idea of programming up from first principles. Many concepts need to be learned before we can build
+useful programs.
