@@ -32,6 +32,7 @@ executable mypr
     build-depends:    
         base ^>=4.14.3.0,
         mysql-simple,
-        text
+        text,
+        validation
     hs-source-dirs:   app
     default-language: Haskell2010

@@ -37,7 +37,8 @@ executable msrv
         warp,
         validation,
         email-validate,
-        bytestring
+        bytestring,
+        text
 
     hs-source-dirs:   app
     default-language: Haskell2010
