@@ -1,0 +1,47 @@
+cabal-version:      2.4
+name:               wsp
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+-- synopsis:
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+-- license:
+author:             Evgeniy Malov
+maintainer:         evgeniiml@gmail.com
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+executable wsp
+    main-is:          Main.hs
+
+    -- Modules included in this executable, other than Main.
+    other-modules: Core
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:    
+        base ^>=4.14.3.0,
+        network,        
+        wai,        
+        validation,        
+        bytestring,
+        text,
+        aeson,
+        lens,
+        either,
+        utf8-string,
+        mysql-simple,
+        mysql,
+        websockets
+    hs-source-dirs:   app
+    default-language: Haskell2010
