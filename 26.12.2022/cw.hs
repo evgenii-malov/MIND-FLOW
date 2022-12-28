@@ -96,3 +96,5 @@ solve area words = space
         gw = groupOn length (sortOn (O.Down . length) Main.words)
         ss = slots area
         fss = [s |s@(Slot _ _ l) <- ss, l `elem` (length <$> words)]
+
+
