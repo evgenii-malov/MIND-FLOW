@@ -98,3 +98,5 @@ solve area words = space
         fss = [s |s@(Slot _ _ l) <- ss, l `elem` (length <$> words)]
 
 
+
+
