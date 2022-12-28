@@ -85,8 +85,19 @@ sample =
 words = ["LONDON","DELHI","ICELAND","ANKARA"]
 
 --solve :: [String] -> [String] -> [String]
-solve area words = space
+solve area words = head $ dropWhile isNothing $ check <$> sequence space
     where
+    	check :: [(Slot,String)] -> Maybe [String]
+	check comb = foldM place area comb
+	place ar ((Slot gi d l),word) | is_placed = Just ar'
+                                      | otherwise = Nothing
+		where
+		    is_placed | d == Vert = go_v gi word
+		              | d == Horiz = go_h gi word
+	            -- go :: [String] -> GI -> Maybe [String]		      
+		    go_v gi word = _ 
+		    go_h gi word = _
+		    ar' = _ 
         space = zipWith z gs gw
         z ss ws = do s<-ss
                      w<-ws
