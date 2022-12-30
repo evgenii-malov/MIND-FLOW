@@ -89,15 +89,26 @@ solve area words = head $ dropWhile isNothing $ check <$> sequence space
     where
     	check :: [(Slot,String)] -> Maybe [String]
 	check comb = foldM place area comb
-	place ar ((Slot gi d l),word) | is_placed = Just ar'
-                                      | otherwise = Nothing
-		where
-		    is_placed | d == Vert = go_v gi word
-		              | d == Horiz = go_h gi word
+	place ar ((Slot gi d l),word) 
+		    | d == Vert = go_v ar gi word
+		    | d == Horiz = go_h ar gi word
+		    where 
 	            -- go :: [String] -> GI -> Maybe [String]		      
-		    go_v gi word = _ 
-		    go_h gi word = _
-		    ar' = _ 
+		    gi_v s gi [] = Just $ s
+		    go_v s gi (c:word) | isJust $ tryp c = go_v s' (gi+10) word
+				       | otherwise = Nothing
+				       where
+				       	(Just s') = tryp c
+					tryp c | ch == '-' || ch == c = Just ns
+					       | otherwise = Nothing
+					  where
+					    ch = (s ! y) ! x
+					    ns = replace s y (replace (s ! y) x c)
+					    (y,x) = toXY gi 
+
+
+
+
         space = zipWith z gs gw
         z ss ws = do s<-ss
                      w<-ws
