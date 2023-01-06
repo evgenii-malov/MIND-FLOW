@@ -1,9 +1,19 @@
+{-
+  stocks prediction: https://www.hackerrank.com/challenges/crosswords-101/
+  Author: Evgeniy Malov <evgeniiml@gmail.com>
+  Date: Jan 3, 2023
+  join me : https://www.youtube.com/@EvgeniyMalov
+            https://ru.linkedin.com/in/deepwalk
+-}
+
 import qualified Data.Vector.Unboxed as U
 import qualified Data.Ord as O
-import Data.Bool (Bool)
 import Debug.Trace
-import Data.List.Extra
-import SizedSeq (ssElts)
+import Data.List
+import Data.List.Split
+import qualified Data.List as L
+import Data.Maybe
+import Control.Monad
 
 type X = Int
 type Y = Int
@@ -13,6 +23,8 @@ type SLength = Int
 -- data Slot = Slot X Y Dir Length
 data Slot = Slot GI Dir SLength deriving (Eq,Show)
 data Dir = Vert | Horiz  deriving (Eq,Show)
+
+slot_len (Slot _ _ l) = l
 
 slotToGis :: Slot -> [GI]
 slotToGis (Slot gi d l) | d == Vert = (\dy->gi+dy*10) <$> [0..l-1]
@@ -56,16 +68,69 @@ slots p = fst3 (foldl it ([],U.replicate 100 False,U.replicate 100 False) [0..99
                 lx = len_x gi
                 len_y gi = go 1 gi
                            where
-                            go c gi | not $ sEmpty p markedY (traceShowId gi) = c - 1
+                            go c gi | not $ sEmpty p markedY (gi) = c - 1
                                     | gi > 89 = c
                                     | otherwise = go (c+1) (gi+10)
                 len_x gi = go 1 gi
                            where
-                            go c gi | not $ sEmpty p markedX (traceShowId gi) = c - 1
+                            go c gi | not $ sEmpty p markedX (gi) = c - 1
                                     | gi `mod` 10 == 9 = c
                                     | otherwise = go (c+1) (gi+1)
 
---  [s | s@(Slot _ _ l) <- slots sample , l>1]
+
+solve :: [String] -> [String] -> [String]
+solve area words = fromJust $ head $ dropWhile isNothing $ check <$> sequence combs
+    where
+        
+        combs:: [[(Slot,String)]]
+        combs = (\w -> [(s,w) | s <- (slots area), slot_len s == length w ] ) <$> swords
+        swords = sortOn (O.Down . length) words        
+
+        check :: [(Slot,String)] -> Maybe [String]
+        check comb = foldM place area comb
+        place ar ((Slot gi d l),word) 
+                | d == Vert = go_v ar gi word
+                | d == Horiz = go_h ar gi word
+                where 
+                    
+
+                go_v = go (+10)
+                go_h = go (+1)
+
+                go step s gi [] = Just $ s
+                go step s gi (c:word) 
+                        | isJust $ tryp c = go step s' (step gi) word
+                        | otherwise = Nothing
+                        where
+                            (Just s') = tryp c
+                            tryp c 
+                                | ch == '-' || ch == c = Just ns
+                                | otherwise = Nothing
+                                where
+                                    ch = (s L.!! y) L.!! x
+                                    ns = replace_ s y (replace_ (s L.!! y) x c)
+                                    (y,x) = toXY gi 
+
+
+replace_ :: [a] -> Int -> a -> [a]
+replace_ ls p nc | 0<=p && p < length ls = (init $ take (p+1) ls) ++ [nc] ++ (drop (p+1) ls)
+                | otherwise = error "index range error in replace"  
+
+
+
+render :: Show a => [a] -> IO ()
+render ls = sequence_ $ putStrLn.show <$> ls
+
+rend :: [String] -> IO ()
+rend ls = sequence_ $ putStrLn <$> ls
+
+
+main = do  
+         scr <- replicateM 10 getLine                     
+         l' <- getLine
+         let words = wordsBy (== ';') l'         
+         rend $ solve (scr) (words)
+
 
 sample =
         [
@@ -81,44 +146,39 @@ sample =
         "+++++-++++"
         ]
 
+sample2 = [
+    "+-++++++++",
+    "+-++++++++",
+    "+-------++",
+    "+-++++++++",
+    "+-++++++++",
+    "+------+++",
+    "+-+++-++++",
+    "+++++-++++",
+    "+++++-++++",
+    "++++++++++"
+    ]
+
 
 words = ["LONDON","DELHI","ICELAND","ANKARA"]
+words2 = ["AGRA","NORWAY","ENGLAND","GWALIOR"]
 
---solve :: [String] -> [String] -> [String]
-solve area words = head $ dropWhile isNothing $ check <$> sequence space
-    where
-    	check :: [(Slot,String)] -> Maybe [String]
-	check comb = foldM place area comb
-	place ar ((Slot gi d l),word) 
-		    | d == Vert = go_v ar gi word
-		    | d == Horiz = go_h ar gi word
-		    where 
-	            -- go :: [String] -> GI -> Maybe [String]		      
-		    gi_v s gi [] = Just $ s
-		    go_v s gi (c:word) | isJust $ tryp c = go_v s' (gi+10) word
-				       | otherwise = Nothing
-				       where
-				       	(Just s') = tryp c
-					tryp c | ch == '-' || ch == c = Just ns
-					       | otherwise = Nothing
-					  where
-					    ch = (s ! y) ! x
-					    ns = replace s y (replace (s ! y) x c)
-					    (y,x) = toXY gi 
+-- solve area words = sequence ws
+--     where                
+--         ss = slots area
+--         ws :: [[(Slot,String)]]
+--         ws = (\w -> [(s,w) | s <- ss, slot_len s == length w ] ) <$> swords
+--         swords = sortOn (O.Down . length) Main.words
+        
 
 
+-- [[s7],[s6_1,s6_2],[s5]]
+-- [[w7_1],[w6_1,w6_2],[w5_1]]
 
+-- [[s7],  [s6_1,s6_2],[s6_1,s6_2],[s5]]
+-- [[w7_1],[w6_1],     [w6_2],    [w5_1]]
 
-        space = zipWith z gs gw
-        z ss ws = do s<-ss
-                     w<-ws
-                     return (s,w)   
-
-        gs = groupOn (\(Slot _ _ l)->l) (sortBy (\(Slot _ _ l1) (Slot _ _ l2) -> compare (O.Down l1) (O.Down l2)) fss)
-        gw = groupOn length (sortOn (O.Down . length) Main.words)
-        ss = slots area
-        fss = [s |s@(Slot _ _ l) <- ss, l `elem` (length <$> words)]
-
-
-
-
+-- [(s7,w7_1),(s6_1,w6_1),(s6_1,w6_2),(s5,w5_1)],
+-- [(s7,w7_1),(s6_2,w6_1),(s6_1,w6_2),(s5,w5_1)],
+-- [(s7,w7_1),(s6_1,w6_2),(s6_1,w6_2),(s5,w5_1)],
+-- [(s7,w7_1),(s6_1,w6_2),(s6_2,w6_2),(s5,w5_1)],
