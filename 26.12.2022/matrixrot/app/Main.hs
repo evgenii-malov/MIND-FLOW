@@ -1,14 +1,26 @@
+{-
+  matrix rotation: https://www.hackerrank.com/challenges/matrix-rotation/problem
+  Author: Evgeniy Malov <evgeniiml@gmail.com>
+  Date: Jan 15, 2023
+  join me : https://www.youtube.com/@EvgeniyMalov
+            https://ru.linkedin.com/in/deepwalk
+-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use camelCase" #-}
 module Main where
 
 import qualified Data.Matrix as M
+import Control.Monad
+import Data.Matrix (toLists)
 
 type X = Int -- [0..]
 type Y = Int -- [0..]
 type Height = Int -- max coord + 1
-type Width = Int 
+type Width = Int
 
 type InitHeight = Int
-type InitWidth = Int 
+type InitWidth = Int
 
 data Side = Left | Right | Top | Bottom deriving (Eq,Show)
 
@@ -19,21 +31,21 @@ subr x y ih iw = (sh,sw)
         sw | mn<=xmid = iw - 2*mn
            | otherwise = iw - 2*(iw - 1 - mx)
         sh | mn<=ymid = ih - 2*mn
-           | otherwise = ih - 2*(ih - 1 - mx)  
-        mn = min x y    
-        mx = max x y    
+           | otherwise = ih - 2*(ih - 1 - mx)
+        mn = min x y
+        mx = max x y
         xmid = iw `div` 2
         ymid = ih `div` 2
 
 
-subrect :: Y -> X -> InitHeight -> InitWidth -> (Height,Width)        
-subrect y x ih iw = go 0 0 (ih-1) (iw-1) ih iw 
+subrect :: Y -> X -> InitHeight -> InitWidth -> (Height,Width)
+subrect y x ih iw = go 0 0 (ih-1) (iw-1) ih iw
     where
        go ly lx ry rx h w | x == lx || x == rx || y == ly || y == ry = (h,w)
                           | otherwise = go (ly+1) (lx+1) (ry-1) (rx-1) (h-2) (w-2)
 
-subrect_c :: Y -> X -> InitHeight -> InitWidth -> (Y,X,Y,X)        
-subrect_c y x ih iw = go 0 0 (ih-1) (iw-1) ih iw 
+subrect_c :: Y -> X -> InitHeight -> InitWidth -> (Y,X,Y,X)
+subrect_c y x ih iw = go 0 0 (ih-1) (iw-1) ih iw
     where
        go ly lx ry rx h w | x == lx || x == rx || y == ly || y == ry = (ly,lx,ry,rx)
                           | otherwise = go (ly+1) (lx+1) (ry-1) (rx-1) (h-2) (w-2)
@@ -49,7 +61,7 @@ subrect_c y x ih iw = go 0 0 (ih-1) (iw-1) ih iw
 -- 0 1 2 3 
 
 side :: Y -> X -> InitHeight -> InitWidth -> Side
-side y x ih iw 
+side y x ih iw
     | x == lx && y<ry = Main.Left
     | x<rx && y==ry = Main.Bottom
     | x == rx && y>ly = Main.Right
@@ -65,36 +77,43 @@ newpos y x ih iw r = go y x active_l
                  | s y x == Main.Bottom = go y (x+1) (l-1)
                  | s y x == Main.Right = go (y-1) x (l-1)
                  | s y x == Main.Top = go y (x-1) (l-1)
-            where 
+            where
               s y x = side y x ih iw
         active_l = r `mod` perimiter
         perimiter = r_w*2+r_h*2
         (r_h,r_w) = subrect y x ih iw
-        
+
 
 cartProd xs ys = [(x,y) | x <- xs, y <- ys]
 
 solve :: M.Matrix Int -> Int -> M.Matrix Int
 solve m r = foldl f zm (cartProd [1..h] [1..w])
-    where 
+    where
         f mx (y,x) = M.setElem orig (np_y+1,np_x+1) mx
             where
                 (np_y,np_x) = newpos (y-1) (x-1) h w r
-                orig = m M.! (y,x)                        
+                orig = m M.! (y,x)
         zm = M.zero h w
         h = M.nrows m
         w = M.ncols m
-    
+
         --r | x + active_path <= r_w = (x + active_path,y)
         --  | x + active_path <= (r_w+r_h) = (r_w,(x + active_path)-r_w)
         --  | x + active_path <= (2*r_w+r_h) = ((2*r_w+h) - (x + active_path),1)
         --  | otherwise = (1, (x + active_path) - (2*r_w+h) )  
-        
-        
+
+
 
 m = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
 mM = M.fromLists m
 
 
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = do
+        l <- getLine
+        let [h, w, r] = (read :: String -> Int) <$> words l
+        ls' <- replicateM h getLine
+        let ls = (\l -> (read :: String -> Int) <$> words l) <$> ls'
+        let sm = solve (M.fromLists ls) r
+        forM_ (toLists sm) (\l -> putStrLn $ unwords $ show <$> l)
+
