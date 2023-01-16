@@ -13,6 +13,7 @@ module Main where
 import qualified Data.Matrix as M
 import Control.Monad
 import Data.Matrix (toLists)
+import qualified Data.Map as Mp
 
 type X = Int -- [0..]
 type Y = Int -- [0..]
@@ -24,18 +25,6 @@ type InitWidth = Int
 
 data Side = Left | Right | Top | Bottom deriving (Eq,Show)
 
-
-subr :: X -> Y -> InitHeight -> InitWidth -> (Height,Width)
-subr x y ih iw = (sh,sw)
-    where
-        sw | mn<=xmid = iw - 2*mn
-           | otherwise = iw - 2*(iw - 1 - mx)
-        sh | mn<=ymid = ih - 2*mn
-           | otherwise = ih - 2*(ih - 1 - mx)
-        mn = min x y
-        mx = max x y
-        xmid = iw `div` 2
-        ymid = ih `div` 2
 
 
 subrect :: Y -> X -> InitHeight -> InitWidth -> (Height,Width)
@@ -80,28 +69,39 @@ newpos y x ih iw r = go y x active_l
             where
               s y x = side y x ih iw
         active_l = r `mod` perimiter
-        perimiter = r_w*2+r_h*2
+        perimiter = r_w*2+r_h*2-4
         (r_h,r_w) = subrect y x ih iw
 
 
 cartProd xs ys = [(x,y) | x <- xs, y <- ys]
 
+-- solve :: M.Matrix Int -> Int -> M.Matrix Int
+-- solve m r = foldl f zm (cartProd [1..h] [1..w])
+--     where
+--         f mx (y,x) = M.setElem orig (np_y+1,np_x+1) mx
+--             where
+--                 (np_y,np_x) = newpos (y-1) (x-1) h w r
+--                 orig = m M.! (y,x)
+--         zm = M.zero h w
+--         h = M.nrows m
+--         w = M.ncols m
+
+
 solve :: M.Matrix Int -> Int -> M.Matrix Int
-solve m r = foldl f zm (cartProd [1..h] [1..w])
-    where
-        f mx (y,x) = M.setElem orig (np_y+1,np_x+1) mx
-            where
-                (np_y,np_x) = newpos (y-1) (x-1) h w r
-                orig = m M.! (y,x)
-        zm = M.zero h w
+solve m r = M.matrix h w g 
+    where 
+        g (y,x) = m M.! (y',x')
+            where 
+                (y',x') = d Mp.! (y,x)
+        
+        d = Mp.fromList $ [(n (y-1) (x-1) , (y,x) ) | (y,x) <- (cartProd [1..h] [1..w])]
+            where   
+                n y x = (ny+1,nx+1)
+                    where
+                        (ny,nx) = newpos y x h w r
+
         h = M.nrows m
         w = M.ncols m
-
-        --r | x + active_path <= r_w = (x + active_path,y)
-        --  | x + active_path <= (r_w+r_h) = (r_w,(x + active_path)-r_w)
-        --  | x + active_path <= (2*r_w+r_h) = ((2*r_w+h) - (x + active_path),1)
-        --  | otherwise = (1, (x + active_path) - (2*r_w+h) )  
-
 
 
 m = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
