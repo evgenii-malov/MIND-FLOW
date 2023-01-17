@@ -14,6 +14,7 @@ import qualified Data.Matrix as M
 import Control.Monad
 import Data.Matrix (toLists)
 import qualified Data.Map as Mp
+import qualified Data.Vector.Mutable as Mv
 
 type X = Int -- [0..]
 type Y = Int -- [0..]
@@ -87,26 +88,54 @@ cartProd xs ys = [(x,y) | x <- xs, y <- ys]
 --         w = M.ncols m
 
 
-solve :: M.Matrix Int -> Int -> M.Matrix Int
-solve m r = M.matrix h w g 
-    where 
-        g (y,x) = m M.! (y',x')
-            where 
-                (y',x') = d Mp.! (y,x)
+-- solve :: M.Matrix Int -> Int -> M.Matrix Int
+-- solve m r = M.matrix h w g 
+--     where 
+--         g (y,x) = m M.! (y',x')
+--             where 
+--                 (y',x') = d Mp.! (y,x)
         
-        d = Mp.fromList $ [(n (y-1) (x-1) , (y,x) ) | (y,x) <- (cartProd [1..h] [1..w])]
-            where   
-                n y x = (ny+1,nx+1)
-                    where
-                        (ny,nx) = newpos y x h w r
+--         d = Mp.fromList $ [(n (y-1) (x-1) , (y,x) ) | (y,x) <- (cartProd [1..h] [1..w])]
+--             where   
+--                 n y x = (ny+1,nx+1)
+--                     where
+--                         (ny,nx) = newpos y x h w r
 
+--         h = M.nrows m
+--         w = M.ncols m
+
+solve :: M.Matrix Int -> Int -> IO (Mv.IOVector Int)
+solve m r = do 
+                mv <- Mv.unsafeNew (h*w)
+                forM_ pairs (act mv)
+                return mv
+
+    where        
+        act v (y,x) = do
+                        Mv.write v rind orig                       
+                        where
+                            rind = w*(ny)+(nx)
+                            (ny,nx) = newpos y x h w r
+                            orig = m M.! (y+1,x+1)
+
+
+        pairs = cartProd [0..h-1] [0..w-1]
         h = M.nrows m
         w = M.ncols m
+
 
 
 m = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
 mM = M.fromLists m
 
+
+
+
+forI v f = loop 0
+  where
+    loop i | i >= n    = return ()
+           | otherwise = f i >> loop (i + 1)
+    n = Mv.length v
 
 main :: IO ()
 main = do
@@ -114,6 +143,19 @@ main = do
         let [h, w, r] = (read :: String -> Int) <$> words l
         ls' <- replicateM h getLine
         let ls = (\l -> (read :: String -> Int) <$> words l) <$> ls'
-        let sm = solve (M.fromLists ls) r
-        forM_ (toLists sm) (\l -> putStrLn $ unwords $ show <$> l)
+        --let sm = solve (M.fromLists ls) r
+        --forM_ (toLists sm) (\l -> putStrLn $ unwords $ show <$> l)
+        sv <- solve (M.fromLists ls) r
+        
+        -- Mv.iforM_ sv (\i e -> do
+        --                         putStr $ ((show e)++" ")
+        --                         when ((i+1) `mod` w == 0) (putStr "\n")
+        --                         )
+
+        forI sv (\i -> do
+                            e <- Mv.read sv i
+                            putStr $ ((show e)++" ")
+                            when ((i+1) `mod` w == 0) (putStr "\n")
+                            )        
+
 
