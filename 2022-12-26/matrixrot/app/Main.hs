@@ -63,12 +63,15 @@ newpos :: Y -> X -> InitHeight -> InitWidth -> Int -> (Y,X)
 newpos y x ih iw r = go y x active_l
     where
         go y x 0 = (y,x)
-        go y x l | s y x == Main.Left = go (y+1) x (l-1)
-                 | s y x == Main.Bottom = go y (x+1) (l-1)
-                 | s y x == Main.Right = go (y-1) x (l-1)
-                 | s y x == Main.Top = go y (x-1) (l-1)
+        go y x l | s y x == Main.Left = let d = min (ry-y) l in  go (y+d) x (l-d)
+                 | s y x == Main.Bottom = let d = min (rx-x) l in go y (x+d) (l-d)
+                 | s y x == Main.Right = let d = min (y-ly) l in go (y-d) x (l-d)
+                 | s y x == Main.Top = let d = min (x-lx) l in go y (x-d) (l-d)
             where
               s y x = side y x ih iw
+              (ly,lx,ry,rx) = subrect_c y x ih iw
+              
+
         active_l = r `mod` perimiter
         perimiter = r_w*2+r_h*2-4
         (r_h,r_w) = subrect y x ih iw
@@ -76,6 +79,7 @@ newpos y x ih iw r = go y x active_l
 
 cartProd xs ys = [(x,y) | x <- xs, y <- ys]
 
+-- unexpectable slow (but in fp spirit) -- creating every time new matrix costs time
 -- solve :: M.Matrix Int -> Int -> M.Matrix Int
 -- solve m r = foldl f zm (cartProd [1..h] [1..w])
 --     where
@@ -87,7 +91,10 @@ cartProd xs ys = [(x,y) | x <- xs, y <- ys]
 --         h = M.nrows m
 --         w = M.ncols m
 
-
+-- acceptable fast, bat next solution is faster (using reverse function here)
+-- BTW:
+-- https://stackoverflow.com/questions/13404208/in-pure-functional-languages-is-there-an-algorithm-to-get-the-inverse-function
+-- https://www.reddit.com/r/haskell/comments/2de0y3/is_it_possible_to_find_the_inverse_function_of/
 -- solve :: M.Matrix Int -> Int -> M.Matrix Int
 -- solve m r = M.matrix h w g 
 --     where 
@@ -121,7 +128,7 @@ solve m r = do
 
         pairs = cartProd [0..h-1] [0..w-1]
         h = M.nrows m
-        w = M.ncols m
+        w = M.ncols m 
 
 
 
